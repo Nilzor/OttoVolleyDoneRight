@@ -8,16 +8,16 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.squareup.otto.Subscribe;
-import nilzor.ottovolley.core.OttoGsonRequest;
 import nilzor.ottovolley.R;
 import nilzor.ottovolley.ServiceLocator;
+import nilzor.ottovolley.core.OttoGsonRequest;
 import nilzor.ottovolley.entities.HttpBinGetResponse;
 import nilzor.ottovolley.messages.VolleyRequestSuccess;
 import nilzor.ottovolley.viewmodels.VolleyRequestActivityViewModel;
 
 public class VolleyRequestActivity extends Activity {
-    private final String Url = "http://httpbin.org/get";
-    //private final String Url = "http://httpbin.org/delay/4";
+    //private final String Url = "http://httpbin.org/get";
+    private final String Url = "http://httpbin.org/delay/1";
     private VolleyRequestActivityViewModel _model;
 
 
@@ -29,28 +29,34 @@ public class VolleyRequestActivity extends Activity {
         setContentView(R.layout.main);
         ServiceLocator.ensureInitialized(this);
         _model = new VolleyRequestActivityViewModel();
-        // Add change listener to the switch
-        ((Switch)findViewById(R.id.eventListenSwitch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onListenForResponseChanged(isChecked);
-            }
-        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.d("OVDR", "onPause()");
-        if(_model.listenForResponse) ServiceLocator.EventBus.unregister(this);
+        if(_model.listenForResponse) {
+            ServiceLocator.ResponseBuffer.startSaving();
+            ServiceLocator.EventBus.unregister(this);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("OVDR", "onResume()");
-        if (_model.listenForResponse) ServiceLocator.EventBus.register(this);
+        if (_model.listenForResponse) {
+            ServiceLocator.EventBus.register(this);
+            ServiceLocator.ResponseBuffer.stopAndProcess();
+        }
         bindUi();
+        // Add change listener to the switch. Must be done after binding, since this might trigger unregister
+        ((Switch)findViewById(R.id.eventListenSwitch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onListenForResponseChanged(isChecked);
+            }
+        });
     }
 
     @Override
@@ -62,6 +68,7 @@ public class VolleyRequestActivity extends Activity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        Log.d("OVDR", "onRestoreInstanceState()");
         _model = (VolleyRequestActivityViewModel) savedInstanceState.getSerializable("Model");
     }
 
@@ -79,16 +86,20 @@ public class VolleyRequestActivity extends Activity {
     }
 
     public void onListenForResponseChanged(boolean isChecked) {
-        _model.listenForResponse = isChecked;
-        registerServiceBus(_model.listenForResponse);
-        Log.d("OVDR", "Listen for response: " + _model.listenForResponse);
+        if (isChecked != _model.listenForResponse){
+            _model.listenForResponse = isChecked;
+            registerServiceBus(_model.listenForResponse);
+            Log.d("OVDR", "Listen for response: " + _model.listenForResponse);
+        }
     }
 
     private void registerServiceBus(boolean register) {
         if (register) {
             ServiceLocator.EventBus.register(this);
+            ServiceLocator.ResponseBuffer.stopAndProcess();
         }
         else {
+            ServiceLocator.ResponseBuffer.startSaving();
             ServiceLocator.EventBus.unregister(this);
         }
     }

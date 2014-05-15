@@ -1,0 +1,10 @@
+out
+.metadata
+gen/**
+bin/**
+*.class
+proguard/*
+target/*
+workspace.xml
+uiDesigner.xml
+vcs.xml

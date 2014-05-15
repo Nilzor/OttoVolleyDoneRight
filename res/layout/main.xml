@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Demonstration of rotation-interrupted HTTP support with Volley with 100% guarantee of response being processed."
+            android:id="@+id/textView" android:layout_gravity="center_horizontal" android:layout_margin="8dp"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HTTP GET"
+            android:id="@+id/button" android:layout_gravity="center_horizontal"
+            android:onClick="performHttpGetQuery" android:layout_margin="16dp"/>
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:id="@+id/linearLayout"
+                  android:layout_gravity="center_horizontal">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceLarge" android:text="Status:"
+                  android:id="@+id/textView4" style="@style/LabelText"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceLarge" android:text="[prevResult]"
+                  android:id="@+id/statusText"/>
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:id="@+id/linearLayout2"
+                  android:layout_gravity="center_horizontal">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceLarge" android:text="Previous result:"
+                  android:id="@+id/textView2" style="@style/LabelText"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceLarge" android:text="[prevResult]"
+                  android:id="@+id/prevResultText"/>
+    </LinearLayout>
+</LinearLayout>
+

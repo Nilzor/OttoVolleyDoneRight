@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LabelText">
+        <item name="android:textColor">#FFA</item>
+    </style>
+
+</resources>

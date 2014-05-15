@@ -3,7 +3,7 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-        >
+              android:textAlignment="viewEnd">
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -15,7 +15,17 @@
             android:layout_height="wrap_content"
             android:text="HTTP GET"
             android:id="@+id/button" android:layout_gravity="center_horizontal"
-            android:onClick="performHttpGetQuery" android:layout_margin="16dp"/>
+            android:onClick="onPerformHttpClicked" android:layout_margin="16dp"/>
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" android:layout_margin="8dp">
+        <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Listen for response"
+                android:id="@+id/eventListenSwitch" android:checked="true"
+                android:textSize="20dp" android:onClick="onListenForResponseChanged"/>
+    </LinearLayout>
     <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
                   android:layout_height="wrap_content" android:id="@+id/linearLayout"
                   android:layout_gravity="center_horizontal">

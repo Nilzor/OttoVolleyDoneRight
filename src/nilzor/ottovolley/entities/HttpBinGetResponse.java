@@ -2,6 +2,7 @@ package nilzor.ottovolley.entities;
 
 import com.google.gson.annotations.SerializedName;
 
+/** Class representing the JSON returned by httpbin.org/get */
 public class HttpBinGetResponse {
     public String origin;
     public String url;

@@ -8,7 +8,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.squareup.otto.Subscribe;
-import nilzor.ottovolley.OttoGsonRequest;
+import nilzor.ottovolley.core.OttoGsonRequest;
 import nilzor.ottovolley.R;
 import nilzor.ottovolley.ServiceLocator;
 import nilzor.ottovolley.entities.HttpBinGetResponse;

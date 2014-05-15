@@ -17,6 +17,7 @@ import java.util.Map;
 
 /**
  * Volley adapter for JSON requests that will be parsed into Java objects by Gson.
+ * From https://gist.github.com/ficusk/5474673
  */
 public class GsonRequest<T> extends Request<T> {
     private final Gson gson = new Gson();

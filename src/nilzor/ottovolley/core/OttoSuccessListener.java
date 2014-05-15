@@ -1,4 +1,4 @@
-package nilzor.ottovolley;
+package nilzor.ottovolley.core;
 
 import com.android.volley.Response;
 import com.squareup.otto.Bus;

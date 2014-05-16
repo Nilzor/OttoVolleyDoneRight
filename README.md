@@ -1,4 +1,4 @@
-#A pattern/example on how to do Android HTTP communication with Volley the right way
+#A pattern on how to do Android HTTP communication with Volley the right way
 
 Volley does that for you, you say? Wrong. Volley solves these problems:
 
@@ -26,7 +26,7 @@ PS: If you don't need #3, it's easy to take out the Gson-dependency (but really.
 The application is compiled with IntelliJ Ultimate 13. I think it will load in both IntelliJ community edition and Android Studio, though.
 When the application is laucnhed, click the "HTTP GET"-button, and rotate the device before the response arrives. 
 Or you can manually disable listening for responses temporarily to allow for the buffer to store the responses by toggling 
-the switch button. 
+the switch button. Notice how the response *always* is processed, even if the response arrives while the activity is paused or after it is recreated as a new `Activity` instance after device rotation.
 
 ##Using it is a library
 To use this example as a library:

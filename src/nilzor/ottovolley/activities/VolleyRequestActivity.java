@@ -14,6 +14,9 @@ import nilzor.ottovolley.ServiceLocator;
 import nilzor.ottovolley.core.OttoGsonRequest;
 import nilzor.ottovolley.entities.HttpBinGetResponse;
 import nilzor.ottovolley.messages.VolleyRequestSuccess;
+import nilzor.ottovolley.okhttpextensions.OkHttpGsonCallback;
+import nilzor.ottovolley.okhttpextensions.OkHttpGsonRequest;
+import nilzor.ottovolley.okhttpextensions.OkHttpGsonResponse;
 import nilzor.ottovolley.viewmodels.VolleyRequestActivityViewModel;
 
 import java.util.ArrayList;
@@ -89,8 +92,33 @@ public class VolleyRequestActivity extends Activity {
         ServiceLocator.VolleyRequestQueue.add(request);
         updateUiForRequestSent(request);
     }
-
+    // OkHttp
     public void onMultiGetClicked(final View view) {
+        _rqStart = System.currentTimeMillis();
+
+        for (int i = 0; i < 20; i++) {
+            OkHttpGsonRequest<HttpBinGetResponse> req = new OkHttpGsonRequest<HttpBinGetResponse>(Url, HttpBinGetResponse.class);
+            req.call(new OkHttpGsonCallback<HttpBinGetResponse>() {
+                @Override
+                public void onResponse(OkHttpGsonResponse<HttpBinGetResponse> response) {
+                    long time = System.currentTimeMillis() - _rqStart;
+                    Log.d("OVDR", String.format("%s Response #%s ", time, "X"));
+                }
+            });
+
+            long time = System.currentTimeMillis() - _rqStart;
+            Log.d("OVDR", String.format("%s Queued request #%s with ID %s", time, i, "X"));
+        }
+    }
+
+    class OkHttpBinCallback implements  OkHttpGsonCallback<HttpBinGetResponse> {
+        @Override
+        public void onResponse(OkHttpGsonResponse<HttpBinGetResponse> response) {
+
+        }
+    }
+
+    public void onMultiGetClicked_Volley(final View view) {
         _rqStart = System.currentTimeMillis();
         ArrayList<OttoGsonRequest<HttpBinGetResponse>> list = new ArrayList<OttoGsonRequest<HttpBinGetResponse>>();
         _requestIds = new ArrayList<Integer>();

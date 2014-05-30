@@ -16,6 +16,7 @@ public class ServiceLocator {
     public static void ensureInitialized(Context context) {
         if (!_isInitialized) {
             _isInitialized = true;
+
             VolleyRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
             EventBus = new Bus();
             ResponseBuffer = new OttoGsonResponseBuffer(EventBus);

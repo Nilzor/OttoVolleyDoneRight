@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import com.android.volley.RequestQueue;
 import com.squareup.otto.Subscribe;
 import nilzor.ottovolley.R;
 import nilzor.ottovolley.ServiceLocator;
@@ -15,10 +16,14 @@ import nilzor.ottovolley.entities.HttpBinGetResponse;
 import nilzor.ottovolley.messages.VolleyRequestSuccess;
 import nilzor.ottovolley.viewmodels.VolleyRequestActivityViewModel;
 
+import java.util.ArrayList;
+
 public class VolleyRequestActivity extends Activity {
     //private final String Url = "http://httpbin.org/get";
     private final String Url = "http://httpbin.org/delay/1";
     private VolleyRequestActivityViewModel _model;
+    private ArrayList<Integer> _requestIds;
+    private long _rqStart;
 
 
 
@@ -85,6 +90,21 @@ public class VolleyRequestActivity extends Activity {
         updateUiForRequestSent(request);
     }
 
+    public void onMultiGetClicked(final View view) {
+        _rqStart = System.currentTimeMillis();
+        ArrayList<OttoGsonRequest<HttpBinGetResponse>> list = new ArrayList<OttoGsonRequest<HttpBinGetResponse>>();
+        _requestIds = new ArrayList<Integer>();
+
+        for (int i = 0; i < 20; i++) {
+            OttoGsonRequest<HttpBinGetResponse> request = new OttoGsonRequest<HttpBinGetResponse>(ServiceLocator.EventBus, Url, HttpBinGetResponse.class);
+            _requestIds.add(request.requestId);
+            ServiceLocator.VolleyRequestQueue.add(request);
+
+            long time = System.currentTimeMillis() - _rqStart;
+            Log.d("OVDR", String.format("%s Queued request #%s with ID %s", time, i, request.requestId));
+        }
+    }
+
     public void onListenForResponseChanged(boolean isChecked) {
         if (isChecked != _model.listenForResponse){
             _model.listenForResponse = isChecked;
@@ -106,7 +126,8 @@ public class VolleyRequestActivity extends Activity {
 
     @Subscribe
     public void onHttpResponseReceived(VolleyRequestSuccess<HttpBinGetResponse> message) {
-        Log.d("OVDR", "Request end: " + message.requestId);
+        long time = System.currentTimeMillis() - _rqStart;
+        Log.d("OVDR", String.format("%s Request end: %s", time, message.requestId));
         updateUiForResponseReceived(message);
     }
     private void updateUiForRequestSent(OttoGsonRequest<HttpBinGetResponse> request) {
